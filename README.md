@@ -1,45 +1,163 @@
-**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
+# 『CodeIgniter徹底入門』のサンプルアプリケーションをCodeIgniter4にアップデート
 
-When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
+ここは『CodeIgniter徹底入門』（翔泳社）に含まれている以下のサンプルアプリケーション（CodeIgniter 1.6.1用）を [CodeIgniter 3.xで動作するように更新したもの](https://github.com/kenjis/codeigniter-tettei-apps) を、CodeIgniter4で動作するように更新するためのプロジェクトです（作業中）。
 
-*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
+- コンタクトフォーム（7章）
+- モバイル対応簡易掲示板（8章）
+- 簡易ショッピングサイト（9章）
 
----
+現在、CodeIgniter 4.1で動作するための更新は完了しており、リファクタリングなどを実施中です。
 
-## Edit a file
+リファクタリング前のコードは、[v4.0.0](https://github.com/kenjis/ci4-tettei-apps/releases/tag/v4.0.0) を参照してください。
 
-You’ll start by editing this README file to learn how to edit a file in Bitbucket.
+<img src="docs/img/01-home.png" alt="Screenshot: Home" width="400"><img src="docs/img/02-form.png" alt="Screenshot: Form" width="400">
+<img src="docs/img/03-bbs.png" alt="Screenshot: BBS" width="400"><img src="docs/img/04-shop.png" alt="Screenshot: Shop" width="400">
 
-1. Click **Source** on the left side.
-2. Click the README.md link from the list of files.
-3. Click the **Edit** button.
-4. Delete the following text: *Delete this line to make a change to the README from Bitbucket.*
-5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and you’ll see the change you just made.
-6. Go back to the **Source** page.
+## 動作確認環境
 
----
+- CodeIgniter 4.1.2-dev ([ci4-app-template](https://github.com/kenjis/ci4-app-template) を使用)
+- PHP 7.4.15
+  - Composer 2.0.8
+- MySQL 5.7
 
-## Create a file
+## 「CodeIgniter 3.xで動作するように更新したもの」からの変更点
 
-Next, you’ll add a new file to this repository.
+- アプリケーションクラスを名前空間付きに移行
+- 設定ファイルを設定クラスに移行 
+  - app/Config/ConfigShop.php
+- ページネーション
+  - 仕様変更に伴い最初のページもURIセグメント数が変わらないものに変更
+  - offsetベースからページ番号に移行
+  - ページネーションのHTMLをテンプレートに移行
+    - App\Views\Pager\default_full
+- バリデーション
+  - Callableの検証ルールをクラスに移行
+    - App\Libraries\Validation\CaptchaRules
+  - バリデーションエラーのHTMLをテンプレートに移行
+    - App\Views\Validation\list
+    - App\Views\Validation\single
+- モバイル掲示板用のフックをコントローラフィルタに移行
+  - App\Filters\ConvertEncoding
+- アプリケーション用の例外クラスを追加
+- テストケースクラスを名前空間付きに移行
+- 受入テスト用にacceptance環境を追加
+  - app/Config/Boot/acceptance.php
+- Composerパッケージの更新
+  - Twigライブラリをcodeigniter-ss-twig v4.0に更新
+  - PHPUnitを9.5に更新
+  - symfony/dom-crawlerを5.2に更新
+  - symfony/css-selectorを5.2に更新
+- GitHub Actionsによるチェックの追加
+  - コーディング標準
+  - PHPUnit
+  - 静的解析
 
-1. Click the **New file** button at the top of the **Source** page.
-2. Give the file a filename of **contributors.txt**.
-3. Enter your name in the empty file space.
-4. Click **Commit** and then **Commit** again in the dialog.
-5. Go back to the **Source** page.
+追加されたComposerのパッケージ
 
-Before you move on, go ahead and explore the repository. You've already seen the **Source** page, but check out the **Commits**, **Branches**, and **Settings** pages.
+- CodeIgniter 3 to 4 Upgrade Helper <https://github.com/kenjis/ci3-to-4-upgrade-helper>
+- Ray.Di <https://github.com/Ray-Di/Ray.Di>
+- PHPUnit Helper <https://github.com/kenjis/phpunit-helper>
+- bear/qatools <https://github.com/bearsunday/BEAR.QATools>
 
----
+## インストール方法
 
-## Clone a repository
+### ダウンロード
 
-Use these steps to clone from SourceTree, our client for using the repository command-line free. Cloning allows you to work on your files locally. If you don't yet have SourceTree, [download and install first](https://www.sourcetreeapp.com/). If you prefer to clone from the command line, see [Clone a repository](https://confluence.atlassian.com/x/4whODQ).
+https://github.com/kenjis/ci4-tettei-apps/archive/develop.zip をダウンロードし解凍します。
 
-1. You’ll see the clone button under the **Source** heading. Click that button.
-2. Now click **Check out in SourceTree**. You may need to create a SourceTree account or log in.
-3. When you see the **Clone New** dialog in SourceTree, update the destination path and name if you’d like to and then click **Clone**.
-4. Open the directory you just created to see your repository’s files.
+### .envファイルの作成
 
-Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
+```
+$ cp env .env
+```
+
+### 依存パッケージのインストール
+
+Composerの依存パッケージをインストールします。
+
+```
+$ composer install
+```
+
+### データベースとユーザーの作成
+
+MySQLにデータベースとユーザーを作成します。
+
+```
+CREATE DATABASE `codeigniter` DEFAULT CHARACTER SET utf8mb4;
+GRANT ALL PRIVILEGES ON codeigniter.* TO username@localhost IDENTIFIED BY 'password';
+```
+
+### データベースマイグレーションとシーディングの実行
+
+データベースにテーブルを作成し、テストデータを挿入します。
+
+```
+$ php spark migrate
+$ php spark db:seed ProductSeeder
+```
+
+## Webサーバーの起動方法
+
+```
+$ php spark serve
+```
+
+## テストの実行方法
+
+### PHPUnitによるアプリケーションテスト
+
+```
+$ composer test
+```
+
+テストカバー率のレポートを生成したい場合は、以下を実行します。カバー率の集計にはXdebugが必要です。
+
+```
+$ composer coverage
+```
+
+レポートは`build/coverage`フォルダに作成されます。
+
+### Codeception/Seleniumによる受入テスト
+
+<https://www.mozilla.org/ja/firefox/new/> よりFirefoxをダウンロードしインストールします。
+
+Homebrewからselenium-server-standaloneとgeckodriverをインストールします。
+
+~~~
+$ brew install selenium-server-standalone
+$ brew install geckodriver
+~~~
+
+Seleniumサーバを起動します。
+
+~~~
+$ selenium-server -port 4444
+~~~
+
+受入テストを実行します。
+
+~~~
+$ sh acceptance-test.sh
+~~~
+
+#### Note
+
+geckodriverが開けない場合は、一度Finderからgeckodriverを右クリックして開いてください。
+
+参考: https://github.com/mozilla/geckodriver/issues/1629#issuecomment-650432816
+
+## ライセンス
+
+サンプルアプリケーションのライセンスは「修正BSDライセンス」です。詳細は、[LICENSE.md](LICENSE.md) をご覧ください。
+
+## 謝辞
+
+サンプルアプリケーションのデザインは、神野みちるさん（株式会社ステップワイズ）にしていただきました。
+
+## 『CodeIgniter徹底入門』について
+
+- [『CodeIgniter徹底入門』のサンプルアプリケーションをCodeIgniter 3.xにアップデート](https://github.com/kenjis/codeigniter-tettei-apps)
+- [『CodeIgniter徹底入門』情報ページ](http://codeigniter.jp/tettei/)
+- [『CodeIgniter徹底入門』に対するノート](https://github.com/codeigniter-jp/codeigniter-tettei-note)

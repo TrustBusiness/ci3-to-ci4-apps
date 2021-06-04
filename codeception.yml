@@ -1,0 +1,37 @@
+# suite config
+suites:
+    acceptance:
+        actor: AcceptanceTester
+        path: acceptance
+        modules:
+            enabled:
+                - WebDriver:
+                    url: http://localhost:8080
+                    browser: firefox
+                - \Helper\Acceptance
+                
+        # add Codeception\Step\Retry trait to AcceptanceTester to enable retries
+        step_decorators:
+            - Codeception\Step\ConditionalAssertion
+            - Codeception\Step\TryTo
+            - Codeception\Step\Retry
+                
+extensions:
+    enabled: [Codeception\Extension\RunFailed]
+
+params: 
+    - env
+
+gherkin: []    
+
+# additional paths
+paths:
+    tests: tests_acceptance
+    output: tests_acceptance/_output
+    data: tests_acceptance/_data
+    support: tests_acceptance/_support
+    envs: tests_acceptance/_envs
+
+settings:
+    shuffle: false
+    lint: true

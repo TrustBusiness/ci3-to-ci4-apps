@@ -1,0 +1,96 @@
+{
+    "name": "kenjis/ci4-tettei-apps",
+    "type": "project",
+    "description" : "『CodeIgniter徹底入門』のサンプルアプリケーション",
+    "license": "BSD-3-Clause",
+    "require": {
+        "php": ">=7.3",
+        "ext-mbstring": "*",
+        "codeigniter4/translations": "dev-develop",
+        "codeigniter4/codeigniter4": "dev-develop",
+        "kenjis/codeigniter-ss-twig": "^4.0",
+        "kenjis/ci3-to-4-upgrade-helper": "~0.1",
+        "liaison/revision": "^1.0",
+        "ray/di": "^2.0"
+    },
+    "require-dev": {
+        "fakerphp/faker": "^1.9",
+        "mikey179/vfsstream": "1.6.*",
+        "phpunit/phpunit": "^9.0",
+        "codeception/codeception": "^4.1",
+        "codeception/module-webdriver": "^1.2",
+        "kenjis/phpunit-helper": "^1.0",
+        "symfony/dom-crawler": "^5.2",
+        "symfony/css-selector": "^5.2",
+        "bamarni/composer-bin-plugin": "^1.4",
+        "rector/rector": "^0.9.31"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\Support\\": "tests/_support"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": "@composer bin all install --ansi",
+        "post-update-cmd": [
+            "@composer dump-autoload",
+            "php spark revision:update",
+            "@composer bin all update --ansi"
+        ],
+        "test": "phpunit --no-coverage",
+        "coverage": "php -dzend_extension=xdebug.so -dxdebug.mode=coverage ./vendor/bin/phpunit --coverage-text --log-junit=build/coverage/junit.xml",
+        "pcov": "php -dextension=pcov.so -d pcov.enabled=1 ./vendor/bin/phpunit --coverage-text --coverage-html=build/coverage  --coverage-clover=coverage.xml --log-junit=build/coverage/junit.xml",
+        "cs-fix": "phpcbf",
+        "cs": "phpcs",
+        "rector": "rector process --dry-run --clear-cache",
+        "rector-fix": "rector process --clear-cache",
+        "md": "phpmd app text ./phpmd.xml --exclude */app/Config,*/app/Views",
+        "metrics": "./vendor/bin/phpmetrics --report-html=build/metrics --exclude='Config,Database,Language,ThirdParty,Views' --junit=build/coverage/junit.xml app",
+        "loc": [
+            "./vendor/bin/phploc --exclude=app/Config --exclude=app/Language --exclude=app/ThirdParty --exclude=app/Views/errors app/",
+            "./vendor/bin/phploc --count-tests --exclude=_supprot --exclude=bootstrap.php tests/"
+        ],
+        "clean": [
+            "./vendor/bin/phpstan clear-result-cache",
+            "./vendor/bin/psalm --clear-cache"
+        ],
+        "sa": [
+            "phpstan analyse --no-progress -c phpstan.neon",
+            "psalm --show-info=true",
+            "@md"
+        ],
+        "tests": [
+            "@cs",
+            "@sa",
+            "@test"
+        ],
+        "build": [
+            "@clean",
+            "@cs",
+            "@sa",
+            "@pcov",
+            "@metrics"
+        ]
+    },
+    "scripts-descriptions": {
+        "test": "Run PHPUnit",
+        "coverage": "Generate test coverage report",
+        "pcov": "Generate test coverage report (pcov)",
+        "cs": "Check the coding style",
+        "cs-fix": "Fix the coding style",
+        "md": "Run PHPMD",
+        "metrics": "Run PhpMetrics",
+        "clean": "Delete tmp files",
+        "sa": "Run static analysis",
+        "tests": "Run tests and quality checks",
+        "build": "Build project"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/codeigniter4/codeigniter4"
+        }
+    ]
+}

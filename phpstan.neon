@@ -1,0 +1,12 @@
+parameters:
+  level: max
+  paths:
+    - app
+  excludes_analyse:
+    - app/Config/*
+    - app/Views/*
+  bootstrapFiles:
+    - vendor/codeigniter4/codeigniter4/system/Test/bootstrap.php
+  scanDirectories:
+    - vendor/codeigniter4/codeigniter4/system/Helpers
+    - vendor/kenjis/ci3-to-4-upgrade-helper/src/CI3Compatible/Helper

@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="PHP_CodeSniffer" xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd">
+    <description>Coding Standard based on PSR-12</description>
+    <arg name="basepath" value="."/>
+    <arg name="extensions" value="php"/>
+    <arg name="parallel" value="80"/>
+    <arg name="cache" value=".phpcs-cache"/>
+    <arg name="colors"/>
+
+    <!-- Compatibility with PHP 7.3.0 -->
+    <config name="php_version" value="70300"/>
+
+    <!-- Ignore warnings, show progress of the run and show sniff names -->
+    <arg value="nps"/>
+
+    <!-- Directories to be checked -->
+    <file>app/Controllers</file>
+    <file>app/Database</file>
+    <file>app/Filters</file>
+    <file>app/Helpers</file>
+    <file>app/Libraries</file>
+    <file>app/Models</file>
+    <file>app/Module</file>
+    <file>tests</file>
+    <exclude-pattern>tests/_support/Libraries/Mock_Libraries_Email.php</exclude-pattern>
+
+    <!-- Doctrine Coding Standard (Based on PSR-12) -->
+    <rule ref="Doctrine">
+    <!-- Exclude rules for BEAR.Sunday -->
+        <exclude name="Generic.Formatting.MultipleStatementAlignment.NotSame"/>
+        <exclude name="Squiz.Strings.DoubleQuoteUsage.ContainsVar"/>
+        <exclude name="SlevomatCodingStandard.Classes.SuperfluousExceptionNaming.SuperfluousSuffix"/>
+        <exclude name="SlevomatCodingStandard.Commenting.DocCommentSpacing.IncorrectOrderOfAnnotationsGroup"/>
+        <exclude name="SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly.ReferencedGeneralException"/>
+        <exclude name="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint"/>
+        <exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint"/>
+
+        <!-- Exclude rules for legacy CodeIgniter Project -->
+        <exclude name="SlevomatCodingStandard.Operators.DisallowEqualOperators.DisallowedEqualOperator"/>
+        <exclude name="SlevomatCodingStandard.Operators.DisallowEqualOperators.DisallowedNotEqualOperator"/>
+
+        <exclude name="SlevomatCodingStandard.ControlStructures.UselessIfConditionWithReturn.UselessIfCondition"/>
+    </rule>
+
+    <!-- Exclude rules -->
+    <rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">
+        <exclude-pattern>tests/*</exclude-pattern>
+        <exclude-pattern>app/Controllers/Shop.php</exclude-pattern>
+        <exclude-pattern>app/Controllers/BbsValidationRules.php</exclude-pattern>
+        <exclude-pattern>app/Libraries/Validation/*</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.Classes.ClassFileName.NoMatch">
+        <exclude-pattern>app/Database/Migrations/*</exclude-pattern>
+        <exclude-pattern>tests/_support/Database/Migrations/*</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.Classes.ValidClassName.NotCamelCaps">
+        <exclude-pattern>tests/app/helpers/*</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.NamingConventions.ValidVariableName.NotCamelCaps">
+        <exclude-pattern>app/Controllers/*</exclude-pattern>
+        <exclude-pattern>app/Libraries/Validation/*</exclude-pattern>
+        <exclude-pattern>app/Database/*</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps">
+        <exclude-pattern>app/Libraries/Validation/*</exclude-pattern>
+    </rule>
+
+    <rule ref="Squiz.Commenting.FunctionComment.WrongStyle">
+        <exclude-pattern>tests/app/*</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.WhiteSpace.FunctionSpacing.After">
+        <exclude-pattern>tests/app/*</exclude-pattern>
+    </rule>
+</ruleset>
